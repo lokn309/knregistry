@@ -44,7 +44,7 @@ public class KNHealthChecker implements HealthChecker {
                         KNRegistryService.TIMESTAMPS.remove(serviceAndInstance);
                     }
                 });
-            }, 10, 30, TimeUnit.SECONDS);
+            }, 10, 10, TimeUnit.SECONDS);
     }
 
     @Override

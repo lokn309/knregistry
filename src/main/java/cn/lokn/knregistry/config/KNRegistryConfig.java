@@ -21,7 +21,7 @@ public class KNRegistryConfig {
         return new KNRegistryService();
     }
 
-    @Bean
+    @Bean(initMethod = "start", destroyMethod = "stop")
     public HealthChecker healthChecker(@Autowired RegistryService registryService) {
         return new KNHealthChecker(registryService);
     }
