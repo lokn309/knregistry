@@ -39,7 +39,8 @@ public class KNHealthChecker implements HealthChecker {
                         log.error(" ===> Health checker: {} is down", serviceAndInstance);
                         final int indexOf = serviceAndInstance.indexOf("@");
                         final String service = serviceAndInstance.substring(0, indexOf);
-                        final InstanceMeta instance = InstanceMeta.from(serviceAndInstance.substring(indexOf));
+                        final String url = serviceAndInstance.substring(indexOf + 1);
+                        final InstanceMeta instance = InstanceMeta.from(url);
                         registryService.unregister(service, instance);
                         KNRegistryService.TIMESTAMPS.remove(serviceAndInstance);
                     }
