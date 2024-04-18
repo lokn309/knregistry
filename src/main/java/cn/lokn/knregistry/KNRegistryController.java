@@ -55,9 +55,4 @@ public class KNRegistryController {
         return registryService.renew(instance, services.split(","));
     }
 
-    public static void main(String[] args) {
-//        InstanceMeta instance = InstanceMeta.http("127.0.0.1", 8080).addParams(Map.of("name", "lokn", "", ""));
-
-    }
-
 }

@@ -1,0 +1,53 @@
+### 根据服务名获取所有实例
+GET http://localhost:8484/findAll?service=cn.lokn.knrpc.demo.api.UserService
+
+### 服务注册
+POST http://localhost:8484/reg?service=cn.lokn.knrpc.demo.api.UserService
+Content-Type: application/json
+
+{
+  "schema" : "http",
+  "context": "knrpc",
+  "host": "127.0.0.1",
+  "port": 8082,
+  "status": false,
+  "parameters": {
+    "evn": "dev",
+    "tag": "RED"
+  }
+}
+
+### 取消服务
+POST http://localhost:8484/unreg?service=cn.lokn.knrpc.demo.api.UserService
+Content-Type: application/json
+
+{
+  "schema" : "http",
+  "context": "knrpc",
+  "host": "127.0.0.1",
+  "port": 8082
+}
+
+### 刷新服务时间戳
+POST http://localhost:8484/renew?service=cn.lokn.knrpc.demo.api.UserService
+Content-Type: application/json
+
+{
+  "schema" : "http",
+  "context": "knrpc",
+  "host": "127.0.0.1",
+  "port": 8082
+}
+
+### 探活服务
+POST http://localhost:8484/renews?service=cn.lokn.knrpc.demo.api.UserService
+Content-Type: application/json
+
+{
+  "schema" : "http",
+  "context": "knrpc",
+  "host": "127.0.0.1",
+  "port": 8082
+}
+
+
