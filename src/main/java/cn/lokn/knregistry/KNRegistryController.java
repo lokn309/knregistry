@@ -55,4 +55,9 @@ public class KNRegistryController {
         return registryService.renew(instance, services.split(","));
     }
 
+    @RequestMapping("/version")
+    public Long version(@RequestParam String service) {
+        return registryService.version(service);
+    }
+
 }

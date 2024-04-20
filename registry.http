@@ -1,7 +1,7 @@
-### 根据服务名获取所有实例
+### 获取所有服务实例
 GET http://localhost:8484/findAll?service=cn.lokn.knrpc.demo.api.UserService
 
-### 服务注册
+### 注册一个实例
 POST http://localhost:8484/reg?service=cn.lokn.knrpc.demo.api.UserService
 Content-Type: application/json
 
@@ -17,7 +17,7 @@ Content-Type: application/json
   }
 }
 
-### 取消服务
+### 取消实例
 POST http://localhost:8484/unreg?service=cn.lokn.knrpc.demo.api.UserService
 Content-Type: application/json
 
@@ -50,4 +50,6 @@ Content-Type: application/json
   "port": 8082
 }
 
+### 获取版本号
+POST http://localhost:8484/version?service=cn.lokn.knrpc.demo.api.UserService
 
