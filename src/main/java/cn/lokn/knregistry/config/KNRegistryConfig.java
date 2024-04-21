@@ -1,5 +1,6 @@
 package cn.lokn.knregistry.config;
 
+import cn.lokn.knregistry.clustre.Cluster;
 import cn.lokn.knregistry.health.HealthChecker;
 import cn.lokn.knregistry.health.KNHealthChecker;
 import cn.lokn.knregistry.service.KNRegistryService;
@@ -24,6 +25,11 @@ public class KNRegistryConfig {
     @Bean(initMethod = "start", destroyMethod = "stop")
     public HealthChecker healthChecker(@Autowired RegistryService registryService) {
         return new KNHealthChecker(registryService);
+    }
+
+    @Bean
+    public Cluster cluster(@Autowired KNRegistryConfigProperties registryConfigProperties) {
+        return new Cluster(registryConfigProperties);
     }
 
 }

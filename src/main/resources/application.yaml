@@ -4,3 +4,9 @@ server:
 spring:
   application:
     name: knregistry
+
+knregistry:
+  serverList:
+    - http://locahost:8484
+    - http://locahost:8485
+    - http://locahost:8486
