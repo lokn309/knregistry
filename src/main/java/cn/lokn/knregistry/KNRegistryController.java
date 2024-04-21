@@ -1,6 +1,8 @@
 package cn.lokn.knregistry;
 
+import cn.lokn.knregistry.clustre.Cluster;
 import cn.lokn.knregistry.model.InstanceMeta;
+import cn.lokn.knregistry.model.Server;
 import cn.lokn.knregistry.service.RegistryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class KNRegistryController {
 
     @Autowired
     private RegistryService registryService;
+
+    @Autowired
+    private Cluster cluster;
 
     @RequestMapping("/reg")
     public InstanceMeta register(@RequestParam String service, @RequestBody InstanceMeta instance) {
@@ -58,6 +63,24 @@ public class KNRegistryController {
     @RequestMapping("/version")
     public Long version(@RequestParam String service) {
         return registryService.version(service);
+    }
+
+    @RequestMapping("/info")
+    public Server info() {
+        log.info(" ===> info: {}", cluster.self());
+        return cluster.self();
+    }
+
+    @RequestMapping("/cluster")
+    public List<Server> cluster() {
+        log.info(" ===> cluster: {}", cluster.getServers());
+        return cluster.getServers();
+    }
+
+    @RequestMapping("/leader")
+    public Server leader() {
+        log.info(" ===> cluster: {}", cluster.leader());
+        return cluster.leader();
     }
 
 }

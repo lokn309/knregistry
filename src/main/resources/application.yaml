@@ -7,6 +7,6 @@ spring:
 
 knregistry:
   serverList:
-    - http://locahost:8484
-    - http://locahost:8485
-    - http://locahost:8486
+    - http://localhost:8484
+    - http://localhost:8485
+    - http://localhost:8486

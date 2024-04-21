@@ -1,6 +1,7 @@
 package cn.lokn.knregistry.service;
 
 import cn.lokn.knregistry.model.InstanceMeta;
+import cn.lokn.knregistry.model.Server;
 
 import java.util.List;
 import java.util.Map;

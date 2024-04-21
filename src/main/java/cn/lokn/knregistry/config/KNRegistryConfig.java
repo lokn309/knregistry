@@ -27,7 +27,7 @@ public class KNRegistryConfig {
         return new KNHealthChecker(registryService);
     }
 
-    @Bean
+    @Bean(initMethod = "init")
     public Cluster cluster(@Autowired KNRegistryConfigProperties registryConfigProperties) {
         return new Cluster(registryConfigProperties);
     }

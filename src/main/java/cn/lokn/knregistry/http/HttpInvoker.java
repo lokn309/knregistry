@@ -2,6 +2,7 @@ package cn.lokn.knregistry.http;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,7 @@ public interface HttpInvoker {
 
     String get(String url);
 
+    @SneakyThrows
     static <T> T httpGet(String url, Class<T> clazz) {
         log.debug(" ===>>> httpGet url: {}", url);
         final String result = Default.post(JSON.toJSONString(clazz), url);
@@ -27,6 +29,7 @@ public interface HttpInvoker {
         return JSON.parseObject(result, clazz);
     }
 
+    @SneakyThrows
     static <T> T httpGet(String url, TypeReference<T> typeReference) {
         log.debug(" ===>>> httpGet url: {}", url);
         final String result = Default.get(url);
@@ -34,6 +37,7 @@ public interface HttpInvoker {
         return JSON.parseObject(result, typeReference);
     }
 
+    @SneakyThrows
     static <T> T httpPost(String url, Class<T> clazz) {
         log.debug(" ===>>> httpPost url: {}", url);
         final String result = Default.post(JSON.toJSONString(clazz), url);
