@@ -58,3 +58,6 @@ GET http://localhost:8484/info
 
 ### 获取leader
 GET http://localhost:8484/leader
+
+### 获取 snapShot
+GET http://localhost:8484/snapShot

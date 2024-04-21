@@ -1,8 +1,10 @@
 package cn.lokn.knregistry;
 
 import cn.lokn.knregistry.clustre.Cluster;
+import cn.lokn.knregistry.clustre.SnapShot;
 import cn.lokn.knregistry.model.InstanceMeta;
 import cn.lokn.knregistry.model.Server;
+import cn.lokn.knregistry.service.KNRegistryService;
 import cn.lokn.knregistry.service.RegistryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,30 +36,41 @@ public class KNRegistryController {
     @RequestMapping("/reg")
     public InstanceMeta register(@RequestParam String service, @RequestBody InstanceMeta instance) {
         log.info(" ===> register {} @ {} ", service, instance);
+        checkLeader();
         return registryService.register(service, instance);
     }
 
     @RequestMapping("/unreg")
     public InstanceMeta unregister(@RequestParam String service, @RequestBody InstanceMeta instance) {
         log.info(" ===> unregister {} @ {} ", service, instance);
+        checkLeader();
         return registryService.unregister(service, instance);
     }
     @RequestMapping("/findAll")
     public List<InstanceMeta> findAllInstances(@RequestParam String service) {
         log.info(" ===> findAllInstances {}", service);
+        checkLeader();
         return registryService.getAllInstances(service);
     }
 
     @RequestMapping("/renew")
     public Long renew(@RequestParam String service, @RequestBody InstanceMeta instance) {
         log.info(" ===> renew {} @ {} ", service, instance);
+        checkLeader();
         return registryService.renew(instance, service);
     }
 
     @RequestMapping("/renews")
     public Long renews(@RequestParam String services, @RequestBody InstanceMeta instance) {
         log.info(" ===> renew {} @ {} ", services, instance);
+        checkLeader();
         return registryService.renew(instance, services.split(","));
+    }
+
+    private void checkLeader() {
+       if (!cluster.self().isLeader()) {
+           throw new RuntimeException("current server is not a leader, the leader is " + cluster.leader().getVersion());
+       }
     }
 
     @RequestMapping("/version")
@@ -81,6 +94,11 @@ public class KNRegistryController {
     public Server leader() {
         log.info(" ===> cluster: {}", cluster.leader());
         return cluster.leader();
+    }
+
+    @RequestMapping("/snapShot")
+    public SnapShot snapShot() {
+        return KNRegistryService.snapShot();
     }
 
 }

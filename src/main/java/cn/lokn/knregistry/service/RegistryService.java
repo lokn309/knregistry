@@ -1,5 +1,6 @@
 package cn.lokn.knregistry.service;
 
+import cn.lokn.knregistry.clustre.SnapShot;
 import cn.lokn.knregistry.model.InstanceMeta;
 import cn.lokn.knregistry.model.Server;
 

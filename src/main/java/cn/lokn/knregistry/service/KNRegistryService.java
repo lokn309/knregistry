@@ -1,11 +1,14 @@
 package cn.lokn.knregistry.service;
 
+import ch.qos.logback.core.joran.sanity.SanityChecker;
+import cn.lokn.knregistry.clustre.SnapShot;
 import cn.lokn.knregistry.model.InstanceMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,11 +26,10 @@ public class KNRegistryService implements RegistryService {
     final static MultiValueMap<String, InstanceMeta> REGISTRY = new LinkedMultiValueMap<>();
     final static Map<String, Long> VERSIONS = new ConcurrentHashMap<>();
     public final static Map<String, Long> TIMESTAMPS = new ConcurrentHashMap<>();
-
-    final static AtomicLong VERSION = new AtomicLong(0L);
+    public final static AtomicLong VERSION = new AtomicLong(0L);
 
     @Override
-    public InstanceMeta register(String service, InstanceMeta instance) {
+    public synchronized InstanceMeta register(String service, InstanceMeta instance) {
         final List<InstanceMeta> metas = REGISTRY.get(service);
         if (metas != null && !metas.isEmpty()) {
             if (metas.contains(instance)) {
@@ -46,7 +48,7 @@ public class KNRegistryService implements RegistryService {
     }
 
     @Override
-    public InstanceMeta unregister(String service, InstanceMeta instance) {
+    public synchronized InstanceMeta unregister(String service, InstanceMeta instance) {
         final List<InstanceMeta> metas = REGISTRY.get(service);
         if (metas == null || metas.isEmpty()) {
             return null;
@@ -82,5 +84,26 @@ public class KNRegistryService implements RegistryService {
     public Map<String, Long> versions(String... services) {
         return Arrays.stream(services).collect(Collectors.toMap(x -> x, VERSIONS::get, (a, b) -> a));
     }
+
+    public static synchronized SnapShot snapShot() {
+        LinkedMultiValueMap<String, InstanceMeta> registry = new LinkedMultiValueMap<>();
+        registry.addAll(REGISTRY);
+        Map<String, Long> versions = new HashMap<>(VERSIONS);
+        Map<String, Long> timestamps = new HashMap<>(TIMESTAMPS);
+        return new SnapShot(registry, versions, timestamps, VERSION.get());
+    }
+
+    public static synchronized long restore(SnapShot snapShot) {
+        REGISTRY.clear();
+        REGISTRY.addAll(snapShot.getRegistry());
+        VERSIONS.clear();
+        VERSIONS.putAll(snapShot.getVersions());
+        TIMESTAMPS.clear();
+        TIMESTAMPS.putAll(snapShot.getTimestamps());
+        VERSION.set(snapShot.getVersion());
+
+        return snapShot.getVersion();
+    }
+
 
 }
