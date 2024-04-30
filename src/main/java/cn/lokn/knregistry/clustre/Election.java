@@ -23,7 +23,7 @@ public class Election {
             log.info(" ===>>> elect for more than one leader: {}", servers);
             elect(servers);
         } else {
-            log.debug(" ===>>> no need election for leader: {}", masters.get(0));
+            log.info(" ===>>> no need election for leader: {}", masters.get(0));
         }
     }
 

@@ -46,7 +46,7 @@ public class ServerHealth {
         if (!self.isLeader() && self.getVersion() < leader.getVersion()) {
             log.debug(" ===>>> leader version: {}, My version: {}", leader.getVersion(), self.getVersion());
             log.debug(" ===>>> sync snapShot from leader: {}", leader);
-            final SnapShot snapShot = HttpInvoker.httpGet("http://" + leader.getUrl() + "/snapShot", SnapShot.class);
+            final SnapShot snapShot = HttpInvoker.httpGet(leader.getUrl() + "/snapShot", SnapShot.class);
             log.debug(" ===>>> sync and restore snapshot: {}", snapShot);
             KNRegistryService.restore(snapShot);
         }

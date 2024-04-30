@@ -1,6 +1,5 @@
 package cn.lokn.knregistry.service;
 
-import ch.qos.logback.core.joran.sanity.SanityChecker;
 import cn.lokn.knregistry.clustre.SnapShot;
 import cn.lokn.knregistry.model.InstanceMeta;
 import lombok.extern.slf4j.Slf4j;
