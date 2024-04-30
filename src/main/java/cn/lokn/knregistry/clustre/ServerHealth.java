@@ -5,7 +5,6 @@ import cn.lokn.knregistry.model.Server;
 import cn.lokn.knregistry.service.KNRegistryService;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;

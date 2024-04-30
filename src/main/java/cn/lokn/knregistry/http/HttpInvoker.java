@@ -45,4 +45,12 @@ public interface HttpInvoker {
         return JSON.parseObject(result, clazz);
     }
 
+    @SneakyThrows
+    static <T> T httpPost(String url, String params, Class<T> clazz) {
+        log.debug(" ===>>> httpPost url: {}", url);
+        final String result = Default.post(params, url);
+        log.debug(" ===>>> httpPost result: {}", result);
+        return JSON.parseObject(result, clazz);
+    }
+
 }

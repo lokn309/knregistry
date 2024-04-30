@@ -1,6 +1,8 @@
 package cn.lokn.knregistry.service;
 
 import cn.lokn.knregistry.clustre.SnapShot;
+import cn.lokn.knregistry.http.HttpInvoker;
+import cn.lokn.knregistry.http.OkHttpInvoker;
 import cn.lokn.knregistry.model.InstanceMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.LinkedMultiValueMap;
@@ -103,6 +105,7 @@ public class KNRegistryService implements RegistryService {
 
         return snapShot.getVersion();
     }
+
 
 
 }

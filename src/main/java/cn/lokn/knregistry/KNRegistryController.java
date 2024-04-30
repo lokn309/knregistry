@@ -2,10 +2,12 @@ package cn.lokn.knregistry;
 
 import cn.lokn.knregistry.clustre.Cluster;
 import cn.lokn.knregistry.clustre.SnapShot;
+import cn.lokn.knregistry.http.HttpInvoker;
 import cn.lokn.knregistry.model.InstanceMeta;
 import cn.lokn.knregistry.model.Server;
 import cn.lokn.knregistry.service.KNRegistryService;
 import cn.lokn.knregistry.service.RegistryService;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,20 +38,28 @@ public class KNRegistryController {
     @RequestMapping("/reg")
     public InstanceMeta register(@RequestParam String service, @RequestBody InstanceMeta instance) {
         log.info(" ===> register {} @ {} ", service, instance);
-        checkLeader();
+        final Server self = cluster.self();
+        if (!self.isLeader()) {
+            String suffixPath = "/reg?service=" + service;
+            return this.callLeader(suffixPath, instance);
+        }
         return registryService.register(service, instance);
     }
 
     @RequestMapping("/unreg")
     public InstanceMeta unregister(@RequestParam String service, @RequestBody InstanceMeta instance) {
         log.info(" ===> unregister {} @ {} ", service, instance);
-        checkLeader();
+        final Server self = cluster.self();
+        if (!self.isLeader()) {
+            String suffixPath = "/unreg?service=" + service;
+            return this.callLeader(suffixPath, instance);
+        }
         return registryService.unregister(service, instance);
     }
+
     @RequestMapping("/findAll")
     public List<InstanceMeta> findAllInstances(@RequestParam String service) {
         log.info(" ===> findAllInstances {}", service);
-        checkLeader();
         return registryService.getAllInstances(service);
     }
 
@@ -68,9 +78,14 @@ public class KNRegistryController {
     }
 
     private void checkLeader() {
-       if (!cluster.self().isLeader()) {
-           throw new RuntimeException("current server is not a leader, the leader is " + cluster.leader().getVersion());
-       }
+        if (!cluster.self().isLeader()) {
+            throw new RuntimeException("current server is not a leader, the leader is " + cluster.leader().getVersion());
+        }
+    }
+
+    private InstanceMeta callLeader(String suffixPath, InstanceMeta instance) {
+        Server leader = cluster.leader();
+        return HttpInvoker.httpPost(leader.getUrl() + suffixPath, JSON.toJSONString(instance), InstanceMeta.class);
     }
 
     @RequestMapping("/version")
